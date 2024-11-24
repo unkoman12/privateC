@@ -1480,7 +1480,7 @@ end
         gg.setVisible(false)
     end
     if YUNI == 1 then
-        xB_A()
+        if prompt_password() then
         Main()
     end
 end
