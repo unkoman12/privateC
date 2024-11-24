@@ -1474,13 +1474,16 @@ function FOVdistanceOff()
     end
 end
 
-    while true do
+YUNI = -1
+while true do
     if gg.isVisible(true) then
         YUNI = 1
         gg.setVisible(false)
     end
     if YUNI == 1 then
         if prompt_password() then
-        Main()
+            Main()
+        end
+        YUNI = -1
     end
 end
