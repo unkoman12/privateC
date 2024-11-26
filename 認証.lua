@@ -1,41 +1,3 @@
-
-function xB_A(s)
-    local v='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-    s = string.gsub(s, '[^'..v..'=]', '')
-    return (s:gsub('.', function(w)
-        if (w == '=') then return '' end
-        local a,b='',(v:find(w)-1)
-        for i=6,1,-1 do a=a..(b%2^i-b%2^(i-1)>0 and '1' or '0') end
-        return a
-    end):gsub('%d%d%d?%d?%d?%d?%d?%d?', function(z)
-        if (#z ~= 8) then return '' end
-        local n=0
-        for j=1,8 do n=n+(z:sub(j,j)=='1' and 2^(8-j) or 0) end
-        return string.char(n)
-    end))
-end
-local encoded_password = "NjY2YmQ3ZmEtY2U5Yi00ZGNlLWFmODAtMGUxMWEwY2EzOTUx" --666bd7fa-ce9b-4dce-af80-0e11a0ca3951
-local correct_password = xB_A(encoded_password)
-local is_authenticated = false
-function prompt_password()
-    if is_authenticated then
-        return true
-    end
-
-    local user_input = gg.prompt({"Enter Password:"}, nil, {gg.TYPE_STRING})
-    if user_input == nil then
-        gg.alert("Password entry was canceled.")
-        os.exit()
-    elseif user_input[1] == correct_password then
-        gg.alert("Password is correct! Access granted.")
-        is_authenticated = true
-        return true
-    else
-        gg.alert("Incorrect password!")
-        os.exit()
-    end
-end
-
 function Main()
     local options = {
         {"重力系メニュー", gravity},
@@ -43,7 +5,6 @@ function Main()
         {"人物系メニュー", movement},
         {"武器系メニュー", weapons},
         {"武器Patch", WeaponPatch},
-        {"軽量化系メニュー", Optimization},
         {"宝箱系メニュー", ChestMenu},
         {"よころわメニュー", yokorowa},
         {"うんこ１", unko},
@@ -234,7 +195,7 @@ function HighJump() --ハイジャンプ
     gg.setRanges(gg.REGION_ANONYMOUS)
     gg.searchNumber("2047615188", gg.TYPE_DWORD, false, gg.SIGN_EQUAL, 0, -1)
     local revert = gg.getResults(100)
-    gg.editAll("2067728458", gg.TYPE_DWORD)
+    gg.editAll("2048120059", gg.TYPE_DWORD)
     gg.processResume()
     gg.toast("ハイジャンプON")
     gg.clearResults()
@@ -245,7 +206,7 @@ function Highspeed() --ハイスピード
     gg.searchNumber("6.874417363427344e+28", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, 0, -1, 0)
     local revert = gg.getResults(100)
     if revert then
-        gg.editAll("4545454533357235950525087744.000000", gg.TYPE_FLOAT)
+        gg.editAll("8.0000002e26", gg.TYPE_FLOAT)
         gg.toast("ハイスピードON")
     else
         gg.toast("検索結果が見つかりませんでした")
@@ -295,12 +256,9 @@ function waterjump() --水ジャンプ
       a[n].address = r[i].address - 0xA8
       a[n].flags = gg.TYPE_DWORD
       a[n].value = 1
-      a[n].freeze = true
       n = n + 1
     end 
-    
     gg.setValues(a)
-    gg.addListItems(a) 
   end
 
   
@@ -357,6 +315,7 @@ function weapons()
         {"武器改造 2", modweapon2ON},
         {"武器改造 3", modweapon3ON},
         {"武器改造 4", modweapon4ON},
+        {"武器改造 5", modweapon5ON},
         {"武器連射 通常モード", rapitfireNomal},
         {"SPAIサポートモード", rapitfirespai},
     }
@@ -410,11 +369,11 @@ end
 
 function modweapon2ON()
     local searches = {
-        {search = "7,037,678,785,175,149,466", edit = "5839750236390219943"},--黒い剣
-        {search = "8,714,128,229,137,304,946", edit = "5839750236390219943"},--UFO
-        {search = "4,348,150,287,900,851,118", edit = "5839750236390219943"},--炎の剣
-        {search = "4,779,651,813,845,810,188", edit = "5839750236390219943"},--SPAIのクールタイムを徐々に減少させる
-        {search = "6,830,252,227,170,004,540", edit = "5839750236390219943"},--貫通銃
+        {search = "7,037,678,785,175,149,466", edit = "7594854902521026534"},--敵を吸い込む銃 --7594854902521026534
+        {search = "8,714,128,229,137,304,946", edit = "7,014,110,306,751,690,576"},--TP
+        {search = "4,348,150,287,900,851,118", edit = "9154010361560142857"},--卵
+        {search = "4,779,651,813,845,810,188", edit = "4341835367419304782"},--流星群
+        {search = "6,830,252,227,170,004,540", edit = "5874208436891509112"},--大砲
     }
     local successCount = 0
     for i, v in ipairs(searches) do
@@ -443,11 +402,11 @@ end
 
 function modweapon3ON()
     local searches = {
-        {search = "7,037,678,785,175,149,466", edit = "7072042234402891557"},--シャボン銃 => はろめい
-        {search = "8,714,128,229,137,304,946", edit = "4,455,778,779,634,469,967"},--通常テレポート => 鳥居
-        {search = "4,348,150,287,900,851,118", edit = "9021198316195654500"},--インパルス => 拘束槍
-        {search = "4,779,651,813,845,810,188", edit = "8547206468328080047"},--火炎銃 => 近接拘束
-        {search = "6,830,252,227,170,004,540", edit = "7594854902521026534"},--リモボ => TP
+        {search = "7,037,678,785,175,149,466", edit = "6,792,867,371,528,032,116"},--シャボン銃 => ヴぁるつ
+        {search = "8,714,128,229,137,304,946", edit = "6,792,867,371,528,032,116"},--通常テレポート => ぁるつ
+        {search = "4,348,150,287,900,851,118", edit = "6,501,296,301,026,126,813"},--インパルス => かみなり
+        {search = "4,779,651,813,845,810,188", edit = "6,501,296,301,026,126,813"},--火炎銃 => かみなり
+        {search = "6,830,252,227,170,004,540", edit = "6,501,296,301,026,126,813"},--リモボ => かみなり
     }
     local successCount = 0
     for i, v in ipairs(searches) do
@@ -476,11 +435,11 @@ end
 
 function modweapon4ON()
     local searches = {
-        {search = "7,037,678,785,175,149,466", edit = "7594854902521026534"},--シャボン銃 => TP
-        {search = "8,714,128,229,137,304,946", edit = "7,918,688,332,838,914,646"},--通常テレポート => かみなり
-        {search = "4,348,150,287,900,851,118", edit = "6,510,739,568,312,634,564"},--インパルス => あめ
-        {search = "4,779,651,813,845,810,188", edit = "5874208436891509112"},--火炎銃 => たいほう
-        {search = "6,830,252,227,170,004,540", edit = "7,838,137,720,127,270,747"},--リモボ => かみなり
+        {search = "7,037,678,785,175,149,466", edit = "7160116981278821677"},--シャボン銃 => 雷
+        {search = "8,714,128,229,137,304,946", edit = "7594854902521026534"},--通常テレポート => 目玉焼き落とす
+        {search = "4,348,150,287,900,851,118", edit = "5874208436891509112"},--インパルス => 目玉焼き
+        {search = "4,779,651,813,845,810,188", edit = "4341835367419304782"},--火炎銃 => 瓶
+        {search = "6,830,252,227,170,004,540", edit = "9021198316195654500"},--リモボ => 黒い剣
     }
     local successCount = 0
     for i, v in ipairs(searches) do
@@ -508,7 +467,38 @@ function modweapon4ON()
 end
 
 
-
+function modweapon5ON()
+    local searches = {
+        {search = "7,037,678,785,175,149,466", edit = "8356735350289798804"},--シャボン銃 => 看守ゆきゅう
+        {search = "8,714,128,229,137,304,946", edit = "8356735350289798804"},--通常テレポート => 看守ゆきゅう
+        {search = "4,348,150,287,900,851,118", edit = "9,139,078,607,104,414,368"},--インパルス => とうめいか
+        {search = "4,779,651,813,845,810,188", edit = "5874208436891509112"},--火炎銃 => たいほう
+        {search = "6,830,252,227,170,004,540", edit = "5874208436891509112"},--リモボ => たいほう
+    }
+    local successCount = 0
+    for i, v in ipairs(searches) do
+        gg.clearResults()
+        gg.setRanges(gg.REGION_ANONYMOUS)
+        gg.searchNumber(v.search, gg.TYPE_QWORD, false, gg.SIGN_EQUAL, 0, -1)
+        local r = gg.getResults(1000)
+        if #r > 0 then
+            local a = {}
+            for j = 1, #r do
+                a[j] = {}
+                a[j].address = r[j].address + 0x10
+                a[j].flags = gg.TYPE_QWORD
+                a[j].value = v.edit
+            end
+            gg.setValues(a)
+            successCount = successCount + 1
+        end
+        if i % 5 == 0 then
+            gg.toast("処理中... " .. i .. "個目の項目を変更中")
+        end
+    end
+    gg.clearResults()
+    gg.toast("変更を完了しました: " .. successCount .. "件")
+end
 
 
 
@@ -675,7 +665,14 @@ function WeaponPatch()
         {"鳥居 無効化", toriidisable},
         {"大砲 無効化", taihoudisable},
         {"青いキャラの噴水 無効化", hunsuiDisable},
+        {"パンチアイス", punchrecovery},
+        {"卵無効", eggdisable},
+        {"目玉焼き入手 無効", medamayakiDisable},
         {"アニメーション無効", opt},
+        {"変身 無効", hensindisable},
+        {"透明化 無効", toumeikadisable},
+        {"流星群 無効", ryuseigunDisable},
+        {"判定無効軽量化", hanteimukouDisable},
 
     }
     local labels = {}
@@ -759,7 +756,7 @@ end
 function TrapDisable() --トラップ
     gg.setRanges(gg.REGION_ANONYMOUS)
     gg.clearResults()
-    gg.searchNumber("7566421188222735354", gg.TYPE_QWORD)
+    gg.searchNumber("6501296301026126813", gg.TYPE_QWORD)
     local res = gg.getResults(1)
     if #res == 0 then return gg.alert("value not found") end
     
@@ -1063,13 +1060,13 @@ end
 function punchESP() --testmodule
     gg.setRanges(gg.REGION_ANONYMOUS)
     gg.clearResults()
-    gg.searchNumber(VartuValue, gg.TYPE_QWORD)
+    gg.searchNumber("h2DCD5D63 75D85D63", gg.TYPE_BYTE)
     local res = gg.getResults(1)
     if #res == 0 then return gg.alert("value not found") end
     
     local val = gg.getValues({{address = res[1].address + 0x70, flags = gg.TYPE_QWORD}})[1].value
     gg.clearResults()
-    gg.searchNumber(punchValue, gg.TYPE_QWORD)
+    gg.searchNumber("7566421188222735354", gg.TYPE_QWORD)
     local weapons = gg.getResults(100)
     if #weapons == 0 then return gg.alert("value not found") end
     for _, w in ipairs(weapons) do 
@@ -1245,6 +1242,147 @@ function humsuudisable() --大砲
     local val = gg.getValues({{address = res[1].address + 0x70, flags = gg.TYPE_QWORD}})[1].value
     gg.clearResults()
     gg.searchNumber("7,918,688,332,838,914,646", gg.TYPE_QWORD)
+    local weapons = gg.getResults(100)
+    if #weapons == 0 then return gg.alert("value not found") end
+    for _, w in ipairs(weapons) do 
+        w.address = w.address + 0x70 
+        w.value = val 
+    end
+    gg.setValues(weapons)
+end
+
+function punchrecovery() --パンチアイス
+    gg.setRanges(gg.REGION_ANONYMOUS)
+    gg.clearResults()
+    gg.searchNumber("7118627438276014591", gg.TYPE_QWORD)
+    local res = gg.getResults(1)
+    if #res == 0 then return gg.alert("value not found") end
+    
+    local val = gg.getValues({{address = res[1].address + 0x70, flags = gg.TYPE_QWORD}})[1].value
+    gg.clearResults()
+    gg.searchNumber(punchValue, gg.TYPE_QWORD)
+    local weapons = gg.getResults(100)
+    if #weapons == 0 then return gg.alert("value not found") end
+    for _, w in ipairs(weapons) do 
+        w.address = w.address + 0x70 
+        w.value = val 
+    end
+    gg.setValues(weapons)
+end
+
+--9154010361560142857卵無効
+function eggdisable() --パンチアイス
+    gg.setRanges(gg.REGION_ANONYMOUS)
+    gg.clearResults()
+    gg.searchNumber("7118627438276014591", gg.TYPE_QWORD)
+    local res = gg.getResults(1)
+    if #res == 0 then return gg.alert("value not found") end
+    
+    local val = gg.getValues({{address = res[1].address + 0x70, flags = gg.TYPE_QWORD}})[1].value
+    gg.clearResults()
+    gg.searchNumber("9154010361560142857", gg.TYPE_QWORD)
+    local weapons = gg.getResults(100)
+    if #weapons == 0 then return gg.alert("value not found") end
+    for _, w in ipairs(weapons) do 
+        w.address = w.address + 0x70 
+        w.value = val 
+    end
+    gg.setValues(weapons)
+end
+
+--4,368,176,234,348,077,357変身
+
+function hensindisable() --変身
+    gg.setRanges(gg.REGION_ANONYMOUS)
+    gg.clearResults()
+    gg.searchNumber("7118627438276014591", gg.TYPE_QWORD)
+    local res = gg.getResults(1)
+    if #res == 0 then return gg.alert("value not found") end
+    
+    local val = gg.getValues({{address = res[1].address + 0x70, flags = gg.TYPE_QWORD}})[1].value
+    gg.clearResults()
+    gg.searchNumber("4,368,176,234,348,077,357", gg.TYPE_QWORD)
+    local weapons = gg.getResults(100)
+    if #weapons == 0 then return gg.alert("value not found") end
+    for _, w in ipairs(weapons) do 
+        w.address = w.address + 0x70 
+        w.value = val 
+    end
+    gg.setValues(weapons)
+end
+
+
+function toumeikadisable() --透明化
+    gg.setRanges(gg.REGION_ANONYMOUS)
+    gg.clearResults()
+    gg.searchNumber(punchValue, gg.TYPE_QWORD)
+    local res = gg.getResults(1)
+    if #res == 0 then return gg.alert("value not found") end
+    
+    local val = gg.getValues({{address = res[1].address + 0x70, flags = gg.TYPE_QWORD}})[1].value
+    gg.clearResults()
+    gg.searchNumber("9,139,078,607,104,414,368", gg.TYPE_QWORD)
+    local weapons = gg.getResults(100)
+    if #weapons == 0 then return gg.alert("value not found") end
+    for _, w in ipairs(weapons) do 
+        w.address = w.address + 0x70 
+        w.value = val 
+    end
+    gg.setValues(weapons)
+end
+
+--4,510,184,599,264,391,609
+
+function medamayakiDisable() --パンチアイス
+    gg.setRanges(gg.REGION_ANONYMOUS)
+    gg.clearResults()
+    gg.searchNumber(punchValue, gg.TYPE_QWORD)
+    local res = gg.getResults(1)
+    if #res == 0 then return gg.alert("value not found") end
+    
+    local val = gg.getValues({{address = res[1].address + 0x70, flags = gg.TYPE_QWORD}})[1].value
+    gg.clearResults()
+    gg.searchNumber("4,510,184,599,264,391,609", gg.TYPE_QWORD)
+    local weapons = gg.getResults(100)
+    if #weapons == 0 then return gg.alert("value not found") end
+    for _, w in ipairs(weapons) do 
+        w.address = w.address + 0x70 
+        w.value = val 
+    end
+    gg.setValues(weapons)
+end
+
+function ryuseigunDisable() --パンチアイス
+    gg.setRanges(gg.REGION_ANONYMOUS)
+    gg.clearResults()
+    gg.searchNumber(punchValue, gg.TYPE_QWORD)
+    local res = gg.getResults(1)
+    if #res == 0 then return gg.alert("value not found") end
+    
+    local val = gg.getValues({{address = res[1].address + 0x70, flags = gg.TYPE_QWORD}})[1].value
+    gg.clearResults()
+    gg.searchNumber("4341835367419304782", gg.TYPE_QWORD)
+    local weapons = gg.getResults(100)
+    if #weapons == 0 then return gg.alert("value not found") end
+    for _, w in ipairs(weapons) do 
+        w.address = w.address + 0x70 
+        w.value = val 
+    end
+    gg.setValues(weapons)
+end
+
+--7160116981278821677
+
+function hanteimukouDisable() --パンチアイス
+    gg.setRanges(gg.REGION_ANONYMOUS)
+    gg.clearResults()
+    gg.searchNumber(punchValue, gg.TYPE_QWORD)
+    local res = gg.getResults(1)
+    if #res == 0 then return gg.alert("value not found") end
+    
+    local val = gg.getValues({{address = res[1].address + 0x70, flags = gg.TYPE_QWORD}})[1].value
+    gg.clearResults()
+    gg.searchNumber("7160116981278821677", gg.TYPE_QWORD)
     local weapons = gg.getResults(100)
     if #weapons == 0 then return gg.alert("value not found") end
     for _, w in ipairs(weapons) do 
@@ -1450,7 +1588,7 @@ function FOVdistance()
     gg.setRanges(gg.REGION_ANONYMOUS)
     gg.searchNumber("-6.50;3.0", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, 0, -1)
     gg.refineNumber("-6.50", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, 0, -1)
-    local a = gg.getResults(1)
+    local a = gg.getResults(5)
     if #a > 0 then
         for i, v in ipairs(a) do
             v.value = "-15"
@@ -1474,16 +1612,12 @@ function FOVdistanceOff()
     end
 end
 
-YUNI = -1
-while true do
+    while true do
     if gg.isVisible(true) then
         YUNI = 1
         gg.setVisible(false)
     end
     if YUNI == 1 then
-        if prompt_password() then
-            Main()
-        end
-        YUNI = -1
+        Main()
     end
 end
