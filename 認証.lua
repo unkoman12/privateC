@@ -311,6 +311,7 @@ function weapons()
     local options = {
         {"武器連射＋反映", hanei},
         {"武器改造 OFF", modweaponOFF},
+        {"武器改造 ちょこぷりとか", weaponV2},
         {"武器改造 1", modweaponON},
         {"武器改造 2", modweapon2ON},
         {"武器改造 3", modweapon3ON},
@@ -332,6 +333,39 @@ function weapons()
     end
 
     YUNI = -2
+end
+
+function weaponV2()
+    local searches = {
+        {search = "7,037,678,785,175,149,466", edit = "6449336147444281397"}, --範囲内の味方を復活させる
+        {search = "8,714,128,229,137,304,946", edit = "8164418693393929328"}, --無敵貫通火の玉
+        {search = "4,348,150,287,900,851,118", edit = "5,004,125,161,477,251,134"}, --拘束槍
+        {search = "4,779,651,813,845,810,188", edit = "7562982822088346034"}, --無敵貫通火の玉
+        {search = "6,830,252,227,170,004,540", edit = "8356735350289798804"}, --看守棒
+    }
+    local successCount = 0
+    for i, v in ipairs(searches) do
+        gg.clearResults()
+        gg.setRanges(gg.REGION_ANONYMOUS)
+        gg.searchNumber(v.search, gg.TYPE_QWORD, false, gg.SIGN_EQUAL, 0, -1)
+        local r = gg.getResults(1000)
+        if #r > 0 then
+            local a = {}
+            for j = 1, #r do
+                a[j] = {}
+                a[j].address = r[j].address + 0x10
+                a[j].flags = gg.TYPE_QWORD
+                a[j].value = v.edit
+            end
+            gg.setValues(a)
+            successCount = successCount + 1
+        end
+        if i % 5 == 0 then
+            gg.toast("処理中... " .. i .. "個目の項目を変更中")
+        end
+    end
+    gg.clearResults()
+    gg.toast("変更を完了しました: " .. successCount .. "件")
 end
 
 function modweaponON()
