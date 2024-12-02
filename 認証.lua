@@ -1,3 +1,5 @@
+gg.alert("ミルクといちごアーサーに脅されて新しい武器改造入れられました、、")
+
 function Main()
     local options = {
         {"重力系メニュー", gravity},
