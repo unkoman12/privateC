@@ -1,4 +1,4 @@
-gg.alert("ミルクといちごアーサーに脅されて新しい武器改造入れられました、、")
+gg.alert("たぬきうどんは首吊って死ね")
 
 function Main()
     local options = {
