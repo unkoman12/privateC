@@ -6,6 +6,7 @@ function Main()
         {"座標系メニュー", Current},
         {"人物系メニュー", movement},
         {"武器系メニュー", weapons},
+        {"究極の超サイヤ人オマンクス！！！！", omankusu},
         {"武器Patch", WeaponPatch},
         {"宝箱系メニュー", ChestMenu},
         {"よころわメニュー", yokorowa},
@@ -337,6 +338,59 @@ function weapons()
 
     YUNI = -2
 end
+
+function omankusu()
+    local options = {
+        {"武器連射＋反映", hanei},
+        {"武器改造 OFF", modweaponOFF},
+        {"武器改造 オマンクス！！", gunV1},
+    }
+    local labels = {}
+    for i = 1, #options do
+        labels[i] = options[i][1]
+    end
+    local siubo = gg.multiChoice(labels, nil, 'PlayinEscapePro')
+    if siubo == nil then return end
+    for i = 1, #options do
+        if siubo[i] then
+            options[i][2]()
+        end
+    end
+
+    YUNI = -2
+end
+
+function gunV1()
+    local searches = {
+        {search = "7,037,678,785,175,149,466", edit = "7,123,622,064,335,627,029"}, --岩みたいなの投げるやつ
+        {search = "8,714,128,229,137,304,946", edit = "8,713,584,705,320,835,868"}, --るかがーるSAI
+        {search = "4,348,150,287,900,851,118", edit = "7,585,539,973,152,331,043"}, --瓶入手
+        {search = "4,779,651,813,845,810,188", edit = "7,520,151,750,345,287,529"}, --くっきー撃つかすぴちの銃
+        {search = "6,830,252,227,170,004,540", edit = "8356735350289798804"}, --旧看守棒
+    }
+    local successCount = 0
+    for i, v in ipairs(searches) do
+        gg.clearResults()
+        gg.setRanges(gg.REGION_ANONYMOUS)
+        gg.searchNumber(v.search, gg.TYPE_QWORD, false, gg.SIGN_EQUAL, 0, -1)
+        local r = gg.getResults(1000)
+        if #r > 0 then
+            local a = {}
+            for j = 1, #r do
+                a[j] = {}
+                a[j].address = r[j].address + 0x10
+                a[j].flags = gg.TYPE_QWORD
+                a[j].value = v.edit
+            end
+            gg.setValues(a)
+            successCount = successCount + 1
+        end
+        if i % 5 == 0 then
+            gg.toast("処理中... " .. i .. "個目の項目を変更中")
+        end
+    end
+    gg.clearResults()
+    gg.
 
 function weaponV1()
     local searches = {
