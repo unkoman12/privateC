@@ -390,7 +390,8 @@ function gunV1()
         end
     end
     gg.clearResults()
-    gg.
+    gg.toast("変更を完了しました: " .. successCount .. "件")
+end
 
 function weaponV1()
     local searches = {
